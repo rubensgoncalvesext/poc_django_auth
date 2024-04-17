@@ -4,7 +4,7 @@ from django.test import TestCase
 from product.models import Product
 from rest_framework import status
 
-url_api = "my_url"
+url_api = ""
 
 class ProductTestCase(TestCase):
     URL = "/product/"
@@ -51,12 +51,13 @@ class LoginTestCase(TestCase):
         response = self.client.post(
                 self.URL,
                 data={},
-                **{"REMOTE_USER": f"Basic"},
+                **{"REMOTE_USER": f"fake_user"},
                 follow=True,
             )
 
         # print(response.content)
-        self.assertEqual(len(response.content), "b'Hello, Basic!'", "User not logged")
+
+        self.assertEqual(str(response.content), "b'Hello, fake_user!'", "User not logged")
         # Assuming your Django app is served at http://localhost:8000/
 
         # <Location "/">
