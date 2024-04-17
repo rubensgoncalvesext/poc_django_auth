@@ -7,6 +7,9 @@ class RemoteUserCustomBackend(ModelBackend):
         print("entrei authenticate")
         print(request.META['HTTP_AUTHORIZATION'])
 
-        # user = UsersUser.objects.filter(pk=user_id)
-        # print(user)
-        # return user
+        # validation_token() -> backend_sistema_velho
+
+        #if validation_token:
+            # user = UsersUser.objects.filter(pk=user_id)
+            # print(user)
+            # return user

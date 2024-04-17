@@ -4,7 +4,7 @@ from django.test import TestCase
 from product.models import Product
 from rest_framework import status
 
-url_api = "https://gestao-dev.dgranel.com.br/api/auth/token/"
+url_api = ""
 
 class ProductTestCase(TestCase):
     URL = "/product/"
@@ -12,8 +12,8 @@ class ProductTestCase(TestCase):
     def get_token(self):
         
         payload = json.dumps({
-            "username": "105.544.806-38",
-            "password": "105@Dgranel"
+            "username": "",
+            "password": ""
         })
 
         headers = {
