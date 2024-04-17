@@ -40,18 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'product',
-    'remote_users'
+    'remote_users',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', 
+    'django.contrib.auth.middleware.AuthenticationMiddleware',    
+    'django.contrib.messages.middleware.MessageMiddleware',    
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django.contrib.auth.middleware.RemoteUserMiddleware",
+    # "django.contrib.auth.middleware.RemoteUserMiddleware",
+    "poc.middleware.RemoteUserMiddleware",
 ]
 
 ROOT_URLCONF = 'poc.urls'
@@ -92,7 +93,7 @@ DATABASES = {
         "HOST": os.environ.get("SQL_HOST", "localhost"),
         "PORT": os.environ.get("SQL_PORT", "5432"),
     },
-    "db_old": {
+    "external_db": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "proj_db",
         "USER": "root",
@@ -144,12 +145,13 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.RemoteUserBackend",
+    # "django.contrib.auth.backends.RemoteUserBackend",
+    'poc.backends.RemoteUserCustomBackend'
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         # 'rest_framework.permissions.IsAuthenticated',
-        'poc.auth.AuthUser',
+        # 'poc.permissions.IsAuthenticated',
     ]
 }

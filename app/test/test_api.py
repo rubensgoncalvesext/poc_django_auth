@@ -66,3 +66,18 @@ class LoginTestCase(TestCase):
         #     SetEnvIf Request_URI "^/" HTTP_REMOTE_USER=%{REMOTE_USER}
         #     RequestHeader set REMOTE_USER %{HTTP_REMOTE_USER}e
         # </Location>
+
+class LoginAuthTestCase(TestCase):
+    URL = "/login/"
+
+    def test_login_auth_success_path(self):
+        response = self.client.post(
+                self.URL,
+                data={},
+                **{"HTTP_AUTHORIZATION": f"Bearer fake_token"},
+                follow=True,
+            )
+
+        print(response.content)
+
+        self.assertEqual(str(response.content), "b'Hello, fake_user!'", "User not logged")

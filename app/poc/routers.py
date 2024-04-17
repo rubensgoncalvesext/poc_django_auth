@@ -1,13 +1,13 @@
 class RemoteUserRouter:
     def db_for_read(self, model, **hints):
         if model._meta.app_label == 'remote_users':
-            return 'db_old'
+            return 'external_db'
 
         return 'default'
 
     def db_for_write(self, model, **hints):
         if model._meta.app_label == 'remote_users':
-            return 'db_old'
+            return 'external_db'
 
         return 'default'
 
