@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'product',
+    'remote_users'
 ]
 
 MIDDLEWARE = [
@@ -77,7 +78,12 @@ WSGI_APPLICATION = 'poc.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+DATABASE_ROUTERS = [
+    'poc.routers.RemoteUserRouter',
+]
+
 DATABASES = {
+
     "default": {
         "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
         "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
@@ -85,6 +91,14 @@ DATABASES = {
         "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
         "HOST": os.environ.get("SQL_HOST", "localhost"),
         "PORT": os.environ.get("SQL_PORT", "5432"),
+    },
+    "db_old": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "proj_db",
+        "USER": "root",
+        "PASSWORD": "root",
+        "HOST": "postgres_external_db",
+        "PORT": "5432",
     }
 }
 
@@ -136,6 +150,6 @@ AUTHENTICATION_BACKENDS = [
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         # 'rest_framework.permissions.IsAuthenticated',
-        'poc.permissions.Permission',
+        'poc.auth.AuthUser',
     ]
 }

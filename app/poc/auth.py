@@ -2,7 +2,7 @@ from django.contrib.auth.models import Permission
 from rest_framework.permissions import BasePermission
 from django.contrib.auth.backends import RemoteUserBackend
 
-class Permission(BasePermission):
+class AuthUser(BasePermission): # trocar o BasePermission
     def has_permission(self, request, view):
         header = request.environ.get("HTTP_AUTHORIZATION")
         if not header:
@@ -18,4 +18,11 @@ class Permission(BasePermission):
         return self.token_validation(auth_info)
     
     def token_validation(self, request, *args, **kwargs):
+        # request no servidor antigo e validar o token ????
+        # nao multiples request devolvendo para o server antigo, agente poderia implement cached.
+        # timetolive ≃ 365 dias.
+        # pendente a criacao do method validate_token ???
+        return self.user_validation()
+    
+    def user_validation(self, request, *args, **kwargs):
         return True

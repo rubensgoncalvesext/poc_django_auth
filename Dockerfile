@@ -57,9 +57,9 @@ RUN pip install django psycopg2-binary djangorestframework
 # STAGE PROD #
 ##############
 
-FROM build as prod
+# FROM build as prod
 
 # Copy in the venv
-COPY --from=build --chown=$USERNAME $PYSETUP_PATH $PYSETUP_PATH
+# COPY --from=build --chown=$USERNAME $PYSETUP_PATH $PYSETUP_PATH
 
 WORKDIR $APP_HOME

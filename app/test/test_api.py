@@ -4,7 +4,7 @@ from django.test import TestCase
 from product.models import Product
 from rest_framework import status
 
-url_api = ""
+url_api = "https://gestao-dev.dgranel.com.br/api/auth/token/"
 
 class ProductTestCase(TestCase):
     URL = "/product/"
@@ -12,8 +12,8 @@ class ProductTestCase(TestCase):
     def get_token(self):
         
         payload = json.dumps({
-            "username": "",
-            "password": ""
+            "username": "105.544.806-38",
+            "password": "105@Dgranel"
         })
 
         headers = {
@@ -34,7 +34,6 @@ class ProductTestCase(TestCase):
             data={},
             format="json",
             **{"HTTP_AUTHORIZATION": f"Bearer {token}"},
-            # **{"HTTP_AUTHUSER": f"Basic am9obkBleGFtcGxlLmNvbTphYmMxMjM="},
             follow=True,
         )
         data_response = response.json()
@@ -55,7 +54,7 @@ class LoginTestCase(TestCase):
                 follow=True,
             )
 
-        # print(response.content)
+        print(response.content)
 
         self.assertEqual(str(response.content), "b'Hello, fake_user!'", "User not logged")
         # Assuming your Django app is served at http://localhost:8000/
