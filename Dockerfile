@@ -52,11 +52,6 @@ RUN apt-get update && \
 RUN pip install --upgrade pip && pip install poetry==$POETRY_VERSION 
 RUN pip install django psycopg2-binary djangorestframework
 
-# Copy and install Python dependencies
-WORKDIR $PYSETUP_PATH
-# COPY ["poetry.lock", "pyproject.toml", "./"]
-# RUN poetry install --no-interaction --no-ansi --no-root --only main
-
 
 ##############
 # STAGE PROD #
@@ -68,14 +63,3 @@ FROM build as prod
 COPY --from=build --chown=$USERNAME $PYSETUP_PATH $PYSETUP_PATH
 
 WORKDIR $APP_HOME
-# copy project
-# COPY --chown=$USERNAME /app $APP_HOME
-
-# run entrypoint
-# COPY entrypoint.sh $HOME
-# RUN chmod +x $HOME/entrypoint.sh
-
-# USER $USERNAME
-# ENTRYPOINT $HOME/entrypoint.sh
-
-# WORKDIR $APP_HOME
