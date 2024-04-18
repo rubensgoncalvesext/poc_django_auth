@@ -3,17 +3,20 @@ import requests
 from django.test import TestCase
 from product.models import Product
 from rest_framework import status
+from poc import settings
+from remote_users.models import AuthtokenToken
 
-url_api = ""
+url_api = settings.EXTERNAL_URL
 
 class ProductTestCase(TestCase):
+    databases = {"default", "external_db"}
     URL = "/product/"
     
     def get_token(self):
         
         payload = json.dumps({
-            "username": "",
-            "password": ""
+            "username": settings.USERNAME,
+            "password": settings.PASSWORD
         })
 
         headers = {
@@ -21,13 +24,43 @@ class ProductTestCase(TestCase):
         }
 
         response = requests.request("POST", url_api, headers=headers, data=payload)
-        return response.json()["token"]
-
+        response.json()["token"]
+    
+    def get_local_token(self):
+        return AuthtokenToken.objects.first().key
+ 
     def setUp(self):
         self.product = Product.objects.create(name='test', price=10)
 
-    def test_remote_auth_path_successfully(self):
+    def test_remote_auth_remote_invalid_token(self):
         token = self.get_token()
+
+        response = self.client.get(
+            self.URL,
+            data={},
+            format="json",
+            **{"HTTP_AUTHORIZATION": f"Bearer {token}"},
+            follow=True,
+        )
+        data_response = response.json()
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # self.assertEqual(len(data_response), 1, "Total register is equal 1")
+
+
+    def test_remote_auth_not_successfully(self):
+        response = self.client.get(
+            self.URL,
+            data={},
+            format="json",
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_remote_auth_get_local_token_path_successfully(self):
+        token = self.get_local_token()
 
         response = self.client.get(
             self.URL,
@@ -42,7 +75,7 @@ class ProductTestCase(TestCase):
 
         self.assertEqual(len(data_response), 1, "Total register is equal 1")
 
-
+        
 class LoginTestCase(TestCase):
     URL = "/login/"
 

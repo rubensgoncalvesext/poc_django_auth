@@ -9,9 +9,10 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
-from pathlib import Path
 import os
+import sys
+from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,27 +33,29 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
+    # 'django.contrib.admin',
+    # 'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
+    # 'django.contrib.sessions',
+    # 'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
     'product',
     'remote_users',
+    
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware', 
-    'django.contrib.auth.middleware.AuthenticationMiddleware',    
-    'django.contrib.messages.middleware.MessageMiddleware',    
+    'poc.middleware.RemoteUserMiddleware',
+    # 'django.contrib.auth.middleware.AuthenticationMiddleware',    
+    # 'django.contrib.messages.middleware.MessageMiddleware',    
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # "django.contrib.auth.middleware.RemoteUserMiddleware",
-    "poc.middleware.RemoteUserMiddleware",
+    
 ]
 
 ROOT_URLCONF = 'poc.urls'
@@ -144,14 +147,32 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTHENTICATION_BACKENDS = [
-    # "django.contrib.auth.backends.RemoteUserBackend",
-    'poc.backends.RemoteUserCustomBackend'
-]
+# AUTHENTICATION_BACKENDS = [
+#     # "django.contrib.auth.backends.RemoteUserBackend",
+#     
+# ]
+
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'poc.backends.RemoteUserCustomBackend'
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
-        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
         # 'poc.permissions.IsAuthenticated',
-    ]
+    ],
+    'UNAUTHENTICATED_USER': None
 }
+
+# AUTH_USER_MODEL = "remote_users.UsersUser"
+
+TESTING = "test" in sys.argv
+if TESTING:
+    TEST_RUNNER = "poc.test_config.CustomTestRunner"
+
+try:
+    exec(open(os.path.join(BASE_DIR, "poc/settings_local.py")).read())
+except IOError:
+    raise Exception("error reading local settings")
+
+
