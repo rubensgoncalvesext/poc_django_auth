@@ -24,6 +24,9 @@ Como o django pode resolver este cenario?
         - em settings.py adicionar o dict DATABASES do banco de dados remoto
     5 - Criaçao das apps: remote_users, product
 
+### Configurando o settings_local
+
+    copiar settings_local_example.py para settings_local.py
 
 ### git pull from repo
     cmd: git clone https://github.com/rubensgoncalvesext/poc_django_auth.git 

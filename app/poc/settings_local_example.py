@@ -1,0 +1,3 @@
+EXTERNAL_URL = ""
+USERNAME = ""
+PASSWORD = ""

@@ -26,5 +26,4 @@ class IsAuthenticated(BasePermission): # trocar o BasePermission
         user_id = 1
 
         user = UsersUser.objects.filter(pk=user_id)
-        print(user)
         return True
